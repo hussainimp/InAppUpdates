@@ -1,0 +1,23 @@
+{
+  "name": "react-native-in-app-update",
+  "version": "1.0.0",
+  "description": "This is used to detect any new version if available of stores",
+  "main": "src/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/hussainimp/InAppUpdates.git"
+  },
+  "author": "Hussain Chhatriwala",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/hussainimp/InAppUpdates/issues"
+  },
+  "homepage": "https://github.com/hussainimp/InAppUpdates#readme",
+  "dependencies": {
+    "@react-native-community/netinfo": "^5.9.0",
+    "react-native-device-info": "^5.5.8"
+  }
+}
