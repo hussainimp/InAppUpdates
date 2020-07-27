@@ -6,6 +6,8 @@ InAppUpdates
 ## Install 
 npm install --save https://github.com/hussainimp/InAppUpdates/master
 
+Or
+
 yarn add https://github.com/hussainimp/InAppUpdates/master
 
 
