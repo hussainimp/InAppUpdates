@@ -15,6 +15,7 @@ Refer to ExampleProject for refrence
 
 ## Usage
 
+```
 import AppUpdateManager from 'react-native-in-app-update';
 
 
@@ -76,3 +77,4 @@ import {
       }
     });
   }
+```
