@@ -7,11 +7,11 @@ For Android native android updates will work.
 
 
 ## Install 
-npm install --save https://github.com/hussainimp/InAppUpdates/master
+npm install --save https://github.com/hussainimp/InAppUpdates
 
 Or
 
-yarn add https://github.com/hussainimp/InAppUpdates/master
+yarn add https://github.com/hussainimp/InAppUpdates
 
 
 ## ExampleProject
