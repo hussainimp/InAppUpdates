@@ -78,3 +78,9 @@ import {
     });
   }
 ```
+
+| Method  | Params  | Description |
+| :------------ |:---------------:| :---------------:|
+| checkForUpdates | useIosDefaultUi, iosAppID | Check for any new updates & emits event if Update is detected |
+| enableIosMocking | Mocking URL | If you want to Test the mocking mode for AppUpdate use any applicatation URL to test App Update (Only For iOS), Can be used if your app is not yet on store|
+| disableiOSMocking | - | Stop Mocking mode & enables live mode (Only For iOS) |
