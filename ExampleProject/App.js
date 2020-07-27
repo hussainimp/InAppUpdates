@@ -9,106 +9,79 @@
 import React from 'react';
 import {
   SafeAreaView,
-  StyleSheet,
-  ScrollView,
-  View,
+  Platform,
   Text,
   StatusBar,
+  DeviceEventEmitter
 } from 'react-native';
+import AppUpdateManager from 'react-native-in-app-update';
 
-import {
-  Header,
-  LearnMoreLinks,
-  Colors,
-  DebugInstructions,
-  ReloadInstructions,
-} from 'react-native/Libraries/NewAppScreen';
 
-const App: () => React$Node = () => {
-  return (
-    <>
-      <StatusBar barStyle="dark-content" />
-      <SafeAreaView>
-        <ScrollView
-          contentInsetAdjustmentBehavior="automatic"
-          style={styles.scrollView}>
-          <Header />
-          {global.HermesInternal == null ? null : (
-            <View style={styles.engine}>
-              <Text style={styles.footer}>Engine: Hermes</Text>
-            </View>
-          )}
-          <View style={styles.body}>
-            <View style={styles.sectionContainer}>
-              <Text style={styles.sectionTitle}>Step One</Text>
-              <Text style={styles.sectionDescription}>
-                Edit <Text style={styles.highlight}>App.js</Text> to change this
-                screen and then come back to see your edits.
-              </Text>
-            </View>
-            <View style={styles.sectionContainer}>
-              <Text style={styles.sectionTitle}>See Your Changes</Text>
-              <Text style={styles.sectionDescription}>
-                <ReloadInstructions />
-              </Text>
-            </View>
-            <View style={styles.sectionContainer}>
-              <Text style={styles.sectionTitle}>Debug</Text>
-              <Text style={styles.sectionDescription}>
-                <DebugInstructions />
-              </Text>
-            </View>
-            <View style={styles.sectionContainer}>
-              <Text style={styles.sectionTitle}>Learn More</Text>
-              <Text style={styles.sectionDescription}>
-                Read the docs to discover what to do next:
-              </Text>
-            </View>
-            <LearnMoreLinks />
-          </View>
-        </ScrollView>
-      </SafeAreaView>
-    </>
-  );
-};
+const EVENT_EMITTER_KEYS = {
+  APP_UPDATE_AVAILABLE_SUCCESS: 'AppUpdateAvailableSuccess',
+  APP_UPDATE_ERROR: 'AppUpdateError',
+  APP_UPDATE_SUCCESS: 'AppUpdateEvent'
+}
 
-const styles = StyleSheet.create({
-  scrollView: {
-    backgroundColor: Colors.lighter,
-  },
-  engine: {
-    position: 'absolute',
-    right: 0,
-  },
-  body: {
-    backgroundColor: Colors.white,
-  },
-  sectionContainer: {
-    marginTop: 32,
-    paddingHorizontal: 24,
-  },
-  sectionTitle: {
-    fontSize: 24,
-    fontWeight: '600',
-    color: Colors.black,
-  },
-  sectionDescription: {
-    marginTop: 8,
-    fontSize: 18,
-    fontWeight: '400',
-    color: Colors.dark,
-  },
-  highlight: {
-    fontWeight: '700',
-  },
-  footer: {
-    color: Colors.dark,
-    fontSize: 12,
-    fontWeight: '600',
-    padding: 4,
-    paddingRight: 12,
-    textAlign: 'right',
-  },
-});
+export default class Application extends Component {
 
-export default App;
+  /*
+   ** Check if any new updates are available
+  */
+  _checkForForceUpdate = () => {
+    AppUpdateManager.checkForUpdates({
+      useIosDefaultUi: false,
+      iosAppID: IOS_APP_ID
+    })
+    this._setListenersForForceUpdate()
+  }
+  /*
+   ** Enable iOS Mocking
+  */
+  enableiOSMocking() {
+    AppUpdateManager.enableIosMocking('https://itunes.apple.com/lookup?id=422689480')//Pass any valid ios app url by changing the App id
+  }
+  /*
+    ** Stop iOS Mocking
+   */
+  disableiOSMocking() {
+    AppUpdateManager.disableIosMocking()
+  }
+
+  async _setListenersForForceUpdate() {
+    DeviceEventEmitter.addListener(EVENT_EMITTER_KEYS.APP_UPDATE_AVAILABLE_SUCCESS, async (e) => {
+      console.log(`New Version detected: ${JSON.stringify(e)}`)
+      const isMajorUpdate = await AppUpdateManager.isUpdateMajor(e)
+      console.log("Available update isMajorUpdate: " + isMajorUpdate);
+      e.isMajorUpdate = isMajorUpdate;
+      AppUpdateManager.processVersionUpdate(e)
+      if (Platform.OS == 'ios') {
+        // If you have disabled module
+      }
+    });
+    DeviceEventEmitter.addListener(EVENT_EMITTER_KEYS.APP_UPDATE_ERROR, (e) => {
+      console.log(`Detected force update error: ${e}`)
+    });
+
+    DeviceEventEmitter.addListener(EVENT_EMITTER_KEYS.APP_UPDATE_SUCCESS, (e) => {
+      if (e.status) {
+        console.log("Android app udate success: " + JSON.stringify(e))
+      }
+      else {
+        console.log("Android app update error: " + JSON.stringify(e))
+      }
+    });
+  }
+
+  render() {
+    return (
+      <>
+        <StatusBar barStyle="dark-content" />
+        <SafeAreaView>
+          <Text>App Update Example</Text>
+        </SafeAreaView>
+      </>
+    );
+  }
+
+}
