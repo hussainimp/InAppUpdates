@@ -1,6 +1,9 @@
 # InAppUpdates
 InAppUpdates
 
+This can be used to detect if a new version of app is present on App Store/Play Store.
+For iOS there is no native support from Apple Developer, hence the UI can be used from module or the callback from this module can be used to display custom UI.
+For Android native android updates will work.
 
 
 ## Install 
